@@ -1,0 +1,13 @@
+ec2-174-129-252-228.compute-1.amazonaws.com
+Database
+dd7r91ru45t7m1
+User
+pmandpnzzgasrz
+Port
+5432
+Password
+e25c15ffb45954036f14a5dd4d2ea18724ad718f6e1c48b394431b6fac57c09f
+URI
+postgres://pmandpnzzgasrz:e25c15ffb45954036f14a5dd4d2ea18724ad718f6e1c48b394431b6fac57c09f@ec2-174-129-252-228.compute-1.amazonaws.com:5432/dd7r91ru45t7m1
+Heroku CLI
+heroku pg:psql postgresql-rugged-69368 --app projectwebyt

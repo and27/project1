@@ -2,8 +2,9 @@ import os
 
 from flask import Flask, render_template, request, redirect, session, jsonify
 from flask_session import Session
-from sqlalchemy import crete_engine
+from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from wrapd import loginRequired
 
@@ -11,18 +12,20 @@ import requests
 
 app = Flask(__name__)
 
-app.config["SECRET_KEY"]="secretkey"
-app.config["SESSION_PERMANENT"]=False
 
+app.config["SESSION_PERMANENT"]=False
+app.config["SESSION_TYPE"]="filesystem"
 Session(app)
 
 engine = create_engine(os.getenv("DATABASE_URL"))
+
+db = scoped_session(sessionmaker(bind=engine))
 
 
 @app.route("/")
 @loginRequired
 def index():
-        return render_template("index.html", channels=channelsCreated)
+        return render_template("index.html",)
 
 @app.route("/signin", methods=['POST','GET'])
 def signin():
@@ -42,11 +45,13 @@ def signin():
 		users = db.execute("SELECT * FROM users WHERE username = :username", {"username":username})
 		result = users.fetchone()
 
-		if result == None or not check_password_hash(result[2], pwd)):
-		return render_template("error.html", message="invalid username or password")
+		if result == None or not check_password_hash(result[2], pwd):
+			return render_template("error.html", message="invalid username or password")
 				
 		session["user_id"]=result[0]
 		session["user_name"]=result[1]
+
+		#Redirect to home page where you can search for books
 		return redirect("/")
 	else:
 		return render_template("signin.html")
@@ -55,21 +60,33 @@ def signin():
 
 @app.route("/register", methods=['POST','GET'])
 def register():
+	
 	session.clear()
 	username=request.form.get("username")
-	pwd=request.form.get("pwd")
 	email=request.form.get("email")
+	pwd=request.form.get("pwd")
+	
 
 	if request.method=="POST":
+		
 		if len(username) <1 or username is '':
 			return render_template("error.html", message="Please enter a username")
 	
-		if len(pwd) <1 or pwd is '':
+		elif len(pwd) <1 or pwd is '':
 			return render_template("error.html", message="Please enter a password")
 
-		if len(email) <1 or email is '':
+		elif not email:
 			return render_template("error.html", message="Please enter an email")
-		return redirect("/")
+		
+
+		hashedPwd = generate_password_hash(pwd)
+
+		db.execute("INSERT INTO users (username, email, pwd) VALUES (:username, :email, :hash)",
+		{"username": username, "email":email, "hash":hashedPwd})
+		db.commit()
+		
+
+		return redirect("/signin")
 	else:
 		return render_template("register.html")
 	

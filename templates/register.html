@@ -1,0 +1,28 @@
+{% extends "template.html"%}
+
+{% block title %}
+Signin
+{% endblock %}
+
+{% block body %}
+	<h1 id="title">Register
+	</h1>
+	
+		<form action="/signin" method="post">
+			<div class="form-group">
+				<label for="username" class="grayC"> Username </label> 
+				<input type="text" class="form-control" id="username" autofocus name="username"></div>
+			<div class="form-group">
+				<label for="email" class="grayC"> Email </label>
+				<input type="email" class="form-control" id="email" name="pwd">
+			</div>
+			<div class="form-group">
+				<label for="pwd" class="grayC">Password</label>
+				<input type="password" class="form-control" id="pwd" name="pwd"></div>
+<div class="text-center">
+			<button class="btn btn-danger largeButton" type="submit">Register </button></div>
+<div class="text-center">
+
+</div>
+		</form>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "template.html" %}
+
+{% block title %} Flack Chat {% endblock %}
+
+{% block body %}
+	<h1 id="title">Welcome to <b>Book App</b>
+	</h1>
+	<h4 class="grayC marginw ">Search for a book</h4>
+	<form action="/create" method="post">
+		<div class="form-group">
+			<input type="text" class="form-control text-center" id="channel" autofocus name="channel">
+		</div>
+<div class="text-center">
+		<button class="btn btn-danger largeButton" type="submit">Search </button></div>
+	</form>
+
+	
+{% endblock %}
+
+

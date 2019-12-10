@@ -1,4 +1,4 @@
-# Class Manager ( Project 1 )
+# Book search ( Project 1 )
 
 The project is a search book app
 
